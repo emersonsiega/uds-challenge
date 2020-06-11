@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:udschallengeapp/app/modules/login/login_bloc.dart';
+import 'package:udschallengeapp/app/modules/login/login_module.dart';
+import 'package:udschallengeapp/app/shared/components/toaster.dart';
 import 'package:udschallengeapp/app/shared/config/app_routes.dart';
 import 'package:udschallengeapp/app/shared/config/color_pallete.dart';
+import 'package:udschallengeapp/app/shared/exceptions/invalid_request_exception.dart';
 import 'package:udschallengeapp/app/shared/validator/email_validator.dart';
 import 'package:udschallengeapp/app/shared/validator/string_validator.dart';
 
@@ -11,6 +15,7 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
+  final _bloc = LoginModule.to.bloc<LoginBloc>();
 
   // Email
   final _emailController = TextEditingController();
@@ -19,6 +24,8 @@ class _LoginPageState extends State<LoginPage> {
   // Password
   final _passwordController = TextEditingController();
   final _passwordNode = FocusNode();
+
+  bool _isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -44,6 +51,7 @@ class _LoginPageState extends State<LoginPage> {
                   helperText: " ",
                   prefixIcon: Icon(Icons.person),
                 ),
+                enabled: !_isLoading,
                 onFieldSubmitted: (_) {
                   FocusScope.of(context).requestFocus(_passwordNode);
                 },
@@ -61,6 +69,7 @@ class _LoginPageState extends State<LoginPage> {
                     helperText: " ",
                     prefixIcon: Icon(Icons.lock),
                   ),
+                  enabled: !_isLoading,
                   scrollPadding: EdgeInsets.symmetric(vertical: 30),
                   onFieldSubmitted: (_) async {
                     await _login();
@@ -74,38 +83,60 @@ class _LoginPageState extends State<LoginPage> {
                 children: <Widget>[
                   FlatButton(
                     child: Text(
-                      "Esqueci minha senha",
+                      "Recuperar senha",
                       style: Theme.of(context).textTheme.button.copyWith(
                             color: ColorPallete.lightBlue,
                           ),
                     ),
-                    onPressed: _recoverPassword,
+                    onPressed: _isLoading ? null : _recoverPassword,
                   ),
                 ],
               ),
-              RaisedButton(
-                child: Container(
-                  padding: EdgeInsets.symmetric(vertical: 16),
-                  child: Text(
-                    "ACESSAR",
-                    style: Theme.of(context).textTheme.button,
+              GestureDetector(
+                onTap: () {
+                  setState(() {
+                    _isLoading = !_isLoading;
+                  });
+                },
+                child: RaisedButton(
+                  child: Container(
+                    height: 50,
+                    child: Center(
+                      child: _isLoading
+                          ? Container(
+                              height: 30,
+                              width: 30,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 1.5,
+                                valueColor: AlwaysStoppedAnimation(
+                                  ColorPallete.white,
+                                ),
+                              ),
+                            )
+                          : Text(
+                              "ACESSAR",
+                              style: Theme.of(context).textTheme.button,
+                            ),
+                    ),
                   ),
+                  onPressed: _login,
                 ),
-                onPressed: _login,
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 16.0),
                 child: OutlineButton(
                   child: Container(
-                    padding: EdgeInsets.symmetric(vertical: 16),
-                    child: Text(
-                      "CRIAR CONTA",
-                      style: Theme.of(context).textTheme.button.copyWith(
-                            color: ColorPallete.udsBlue,
-                          ),
+                    height: 50,
+                    child: Center(
+                      child: Text(
+                        "CRIAR CONTA",
+                        style: Theme.of(context).textTheme.button.copyWith(
+                              color: ColorPallete.udsBlue,
+                            ),
+                      ),
                     ),
                   ),
-                  onPressed: _createAccount,
+                  onPressed: _isLoading ? null : _createAccount,
                 ),
               )
             ],
@@ -116,14 +147,12 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Future<void> _recoverPassword() async {
-    // TODO..
     Navigator.of(context)
         .pushNamed(AppRoutes.recoverPassword)
         .then(_setupReceivedEmail);
   }
 
   Future<void> _createAccount() async {
-    // TODO..
     Navigator.of(context)
         .pushNamed(AppRoutes.createAccount)
         .then(_setupReceivedEmail);
@@ -131,9 +160,8 @@ class _LoginPageState extends State<LoginPage> {
 
   void _setupReceivedEmail(email) {
     if (email != null) {
-      _emailController.text = email;
       _formKey.currentState.reset();
-      FocusScope.of(context).requestFocus(_passwordNode);
+      _emailController.text = email;
     }
   }
 
@@ -141,7 +169,26 @@ class _LoginPageState extends State<LoginPage> {
     FocusScope.of(context).requestFocus(FocusNode());
 
     if (_formKey.currentState.validate()) {
-      // TODO login
+      setState(() {
+        _isLoading = true;
+      });
+
+      try {
+        await _bloc.login(
+          _emailController.text,
+          _passwordController.text,
+        );
+
+        Navigator.of(context).pushReplacementNamed(AppRoutes.home);
+      } on InvalidRequestException catch (ex) {
+        Toaster.showError(context, ex.cause);
+      }
+
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
     }
   }
 }

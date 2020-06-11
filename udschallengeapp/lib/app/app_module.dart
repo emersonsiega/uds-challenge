@@ -1,3 +1,4 @@
+import 'package:udschallengeapp/app/shared/repositories/user_repository.dart';
 import 'package:udschallengeapp/app/app_bloc.dart';
 import 'package:bloc_pattern/bloc_pattern.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +11,9 @@ class AppModule extends ModuleWidget {
       ];
 
   @override
-  List<Dependency> get dependencies => [];
+  List<Dependency> get dependencies => [
+        Dependency((i) => UserRepository()),
+      ];
 
   @override
   Widget get view => AppWidget();

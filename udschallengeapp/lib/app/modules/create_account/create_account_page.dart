@@ -1,5 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:udschallengeapp/app/modules/create_account/create_account_bloc.dart';
+import 'package:udschallengeapp/app/modules/create_account/create_account_module.dart';
+import 'package:udschallengeapp/app/shared/components/loading_action_button.dart';
+import 'package:udschallengeapp/app/shared/components/toaster.dart';
 import 'package:udschallengeapp/app/shared/config/color_pallete.dart';
+import 'package:udschallengeapp/app/shared/exceptions/invalid_request_exception.dart';
+import 'package:udschallengeapp/app/shared/model/user_model.dart';
 import 'package:udschallengeapp/app/shared/validator/email_validator.dart';
 import 'package:udschallengeapp/app/shared/validator/string_validator.dart';
 
@@ -10,6 +16,7 @@ class CreateAccountPage extends StatefulWidget {
 
 class _CreateAccountPageState extends State<CreateAccountPage> {
   final _formKey = GlobalKey<FormState>();
+  final _bloc = CreateAccountModule.to.bloc<CreateAccountBloc>();
 
   // Name
   final _nameController = TextEditingController();
@@ -24,6 +31,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
   final _passwordNode = FocusNode();
 
   bool _showPassword = false;
+  bool _isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -54,6 +62,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                 onFieldSubmitted: (_) {
                   FocusScope.of(context).requestFocus(_emailNode);
                 },
+                enabled: !_isLoading,
                 keyboardType: TextInputType.emailAddress,
                 textInputAction: TextInputAction.next,
                 validator: StringValidator("Nome", 3).validate,
@@ -71,6 +80,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                   onFieldSubmitted: (_) {
                     FocusScope.of(context).requestFocus(_passwordNode);
                   },
+                  enabled: !_isLoading,
                   keyboardType: TextInputType.emailAddress,
                   textInputAction: TextInputAction.next,
                   validator: EmailValidator("Email").validate,
@@ -97,22 +107,24 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                       },
                     ),
                   ),
+                  enabled: !_isLoading,
                   scrollPadding: EdgeInsets.symmetric(vertical: 30),
                   onFieldSubmitted: (_) async {
                     await _createAccount();
                   },
                   obscureText: !_showPassword,
-                  validator: StringValidator("Senha").validate,
+                  validator: StringValidator("Senha", 6).validate,
                 ),
               ),
             ],
           ),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
+      floatingActionButton: LoadingActionButton(
         onPressed: _createAccount,
         tooltip: "Criar conta",
-        child: Icon(Icons.check),
+        isLoading: _isLoading,
+        icon: Icons.check,
       ),
     );
   }
@@ -121,9 +133,33 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
     FocusScope.of(context).requestFocus(FocusNode());
 
     if (_formKey.currentState.validate()) {
-      //TODO...
+      setState(() {
+        _isLoading = true;
+        _showPassword = false;
+      });
 
-      Navigator.of(context).pop(_emailController.text);
+      try {
+        final user = UserModel(
+          email: _emailController.text.trim(),
+          password: _passwordController.text.trim(),
+          name: _nameController.text,
+        );
+
+        await _bloc.createAccount(user);
+
+        Navigator.of(context).pop(_emailController.text);
+      } on InvalidRequestException catch (ex) {
+        Toaster.showError(
+          context,
+          ex.cause,
+        );
+      }
+
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
     }
   }
 }

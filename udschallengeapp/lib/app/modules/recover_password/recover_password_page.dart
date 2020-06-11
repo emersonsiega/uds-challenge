@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:udschallengeapp/app/modules/recover_password/recover_password_bloc.dart';
+import 'package:udschallengeapp/app/modules/recover_password/recover_password_module.dart';
+import 'package:udschallengeapp/app/shared/components/loading_action_button.dart';
+import 'package:udschallengeapp/app/shared/components/toaster.dart';
 import 'package:udschallengeapp/app/shared/config/color_pallete.dart';
+import 'package:udschallengeapp/app/shared/exceptions/invalid_request_exception.dart';
 import 'package:udschallengeapp/app/shared/validator/email_validator.dart';
 
 class RecoverPasswordPage extends StatefulWidget {
@@ -9,9 +14,12 @@ class RecoverPasswordPage extends StatefulWidget {
 
 class _RecoverPasswordPageState extends State<RecoverPasswordPage> {
   final _formKey = GlobalKey<FormState>();
+  final _bloc = RecoverPasswordModule.to.bloc<RecoverPasswordBloc>();
 
   // Email
   final _emailController = TextEditingController();
+
+  bool _isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -51,6 +59,7 @@ class _RecoverPasswordPageState extends State<RecoverPasswordPage> {
                 onFieldSubmitted: (_) async {
                   await _recoverPassword();
                 },
+                enabled: !_isLoading,
                 keyboardType: TextInputType.emailAddress,
                 textInputAction: TextInputAction.done,
                 validator: EmailValidator("Email").validate,
@@ -59,10 +68,11 @@ class _RecoverPasswordPageState extends State<RecoverPasswordPage> {
           ),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
+      floatingActionButton: LoadingActionButton(
         onPressed: _recoverPassword,
         tooltip: "Recuperar senha",
-        child: Icon(Icons.check),
+        isLoading: _isLoading,
+        icon: Icons.check,
       ),
     );
   }
@@ -71,9 +81,23 @@ class _RecoverPasswordPageState extends State<RecoverPasswordPage> {
     FocusScope.of(context).requestFocus(FocusNode());
 
     if (_formKey.currentState.validate()) {
-      //TODO...
+      setState(() {
+        _isLoading = true;
+      });
 
-      Navigator.of(context).pop(_emailController.text);
+      try {
+        await _bloc.recoverPassword(_emailController.text);
+
+        Navigator.of(context).pop(_emailController.text);
+      } on InvalidRequestException catch (ex) {
+        Toaster.showError(context, ex.cause);
+      }
+
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
     }
   }
 }
