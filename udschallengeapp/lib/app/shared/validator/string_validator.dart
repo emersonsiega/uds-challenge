@@ -2,7 +2,7 @@ class StringValidator {
   String field;
   int minSize;
 
-  StringValidator(this.field, [int minSize]);
+  StringValidator(this.field, [this.minSize]);
 
   String validate(String value) {
     if (value?.isEmpty != false) {

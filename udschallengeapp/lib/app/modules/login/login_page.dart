@@ -60,12 +60,9 @@ class _LoginPageState extends State<LoginPage> {
                     labelText: "Senha",
                     helperText: " ",
                     prefixIcon: Icon(Icons.lock),
-                    filled: true,
-                    fillColor: ColorPallete.white,
                   ),
                   scrollPadding: EdgeInsets.symmetric(vertical: 30),
                   onFieldSubmitted: (_) async {
-                    FocusScope.of(context).requestFocus(FocusNode());
                     await _login();
                   },
                   obscureText: true,
@@ -125,10 +122,17 @@ class _LoginPageState extends State<LoginPage> {
 
   Future<void> _createAccount() async {
     // TODO..
-    Navigator.of(context).pushNamed(AppRoutes.createAccount);
+    Navigator.of(context).pushNamed(AppRoutes.createAccount).then((email) {
+      if (email != null) {
+        _emailController.text = email;
+        FocusScope.of(context).requestFocus(_passwordNode);
+      }
+    });
   }
 
   Future<void> _login() async {
+    FocusScope.of(context).requestFocus(FocusNode());
+
     if (_formKey.currentState.validate()) {
       // TODO login
     }

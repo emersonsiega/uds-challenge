@@ -4,8 +4,19 @@ import 'package:udschallengeapp/app/shared/config/color_pallete.dart';
 class AppTheme {
   static ThemeData get buildTheme {
     return ThemeData(
+      appBarTheme: AppBarTheme(
+        color: Colors.transparent,
+        elevation: 0,
+        iconTheme: IconThemeData(
+          color: ColorPallete.black,
+        ),
+        actionsIconTheme: IconThemeData(
+          color: ColorPallete.black,
+        ),
+      ),
       primaryColor: ColorPallete.udsBlue,
-      accentColor: ColorPallete.lightBlue,
+      accentColor: ColorPallete.udsBlue,
+      buttonColor: ColorPallete.udsBlue,
       inputDecorationTheme: InputDecorationTheme(
         isDense: true,
         border: OutlineInputBorder(
