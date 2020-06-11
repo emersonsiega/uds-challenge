@@ -117,17 +117,24 @@ class _LoginPageState extends State<LoginPage> {
 
   Future<void> _recoverPassword() async {
     // TODO..
-    Navigator.of(context).pushNamed(AppRoutes.recoverPassword);
+    Navigator.of(context)
+        .pushNamed(AppRoutes.recoverPassword)
+        .then(_setupReceivedEmail);
   }
 
   Future<void> _createAccount() async {
     // TODO..
-    Navigator.of(context).pushNamed(AppRoutes.createAccount).then((email) {
-      if (email != null) {
-        _emailController.text = email;
-        FocusScope.of(context).requestFocus(_passwordNode);
-      }
-    });
+    Navigator.of(context)
+        .pushNamed(AppRoutes.createAccount)
+        .then(_setupReceivedEmail);
+  }
+
+  void _setupReceivedEmail(email) {
+    if (email != null) {
+      _emailController.text = email;
+      _formKey.currentState.reset();
+      FocusScope.of(context).requestFocus(_passwordNode);
+    }
   }
 
   Future<void> _login() async {
