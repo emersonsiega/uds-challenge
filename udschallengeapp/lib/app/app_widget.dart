@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:udschallengeapp/app/modules/home/home_module.dart';
+import 'package:udschallengeapp/app/shared/config/app_routes.dart';
 import 'package:udschallengeapp/app/shared/config/app_theme.dart';
 
 class AppWidget extends StatelessWidget {
@@ -9,7 +10,7 @@ class AppWidget extends StatelessWidget {
       title: 'Pautas',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.buildTheme,
-      home: HomeModule(),
+      routes: AppRoutes.buildRoutes,
     );
   }
 }

@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "494555558825",
+    "firebase_url": "https://uds-challenge-app.firebaseio.com",
+    "project_id": "uds-challenge-app",
+    "storage_bucket": "uds-challenge-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:494555558825:android:49dadd737a29c9d8a64ab8",
+        "android_client_info": {
+          "package_name": "br.com.siega.udschallengeapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "494555558825-clblslfbng8u8k61bav2nlrd703btui6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBXG_kWl217pFrvrSc2SeERjEtFCFAK_cA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "494555558825-clblslfbng8u8k61bav2nlrd703btui6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
