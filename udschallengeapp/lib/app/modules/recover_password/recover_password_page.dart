@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:udschallengeapp/app/modules/recover_password/recover_password_bloc.dart';
 import 'package:udschallengeapp/app/modules/recover_password/recover_password_module.dart';
+import 'package:udschallengeapp/app/shared/components/custom_app_bar.dart';
 import 'package:udschallengeapp/app/shared/components/loading_action_button.dart';
 import 'package:udschallengeapp/app/shared/components/toaster.dart';
 import 'package:udschallengeapp/app/shared/config/color_pallete.dart';
@@ -24,14 +25,8 @@ class _RecoverPasswordPageState extends State<RecoverPasswordPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          "Recuperar senha",
-          style: Theme.of(context).textTheme.headline.copyWith(
-                color: ColorPallete.black,
-                fontWeight: FontWeight.w500,
-              ),
-        ),
+      appBar: CustomAppBar(
+        title: "Recuperar senha",
       ),
       body: SafeArea(
         child: Form(

@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:udschallengeapp/app/modules/home/components/user_profile_widget.dart';
+import 'package:udschallengeapp/app/shared/components/custom_app_bar.dart';
 import 'package:udschallengeapp/app/shared/components/loading_action_button.dart';
 import 'package:udschallengeapp/app/shared/config/app_routes.dart';
 import 'package:udschallengeapp/app/shared/config/color_pallete.dart';
@@ -14,14 +15,8 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          "Pautas",
-          style: Theme.of(context).textTheme.headline.copyWith(
-                color: ColorPallete.black,
-                fontWeight: FontWeight.w500,
-              ),
-        ),
+      appBar: CustomAppBar(
+        title: "Pautas",
         actions: <Widget>[
           Padding(
             padding: const EdgeInsets.only(right: 10.0),
