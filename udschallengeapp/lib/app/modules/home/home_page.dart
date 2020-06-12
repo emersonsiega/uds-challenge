@@ -1,10 +1,14 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:udschallengeapp/app/modules/home/components/user_profile_widget.dart';
+import 'package:udschallengeapp/app/modules/home/home_bloc.dart';
+import 'package:udschallengeapp/app/modules/home/home_module.dart';
 import 'package:udschallengeapp/app/shared/components/custom_app_bar.dart';
 import 'package:udschallengeapp/app/shared/components/loading_action_button.dart';
+import 'package:udschallengeapp/app/shared/components/toaster.dart';
 import 'package:udschallengeapp/app/shared/config/app_routes.dart';
 import 'package:udschallengeapp/app/shared/config/color_pallete.dart';
+import 'package:udschallengeapp/app/shared/exceptions/invalid_request_exception.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -12,6 +16,39 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final _bloc = HomeModule.to.bloc<HomeBloc>();
+
+  bool _isLoading = false;
+
+  @override
+  void initState() {
+    super.initState();
+
+    Future.delayed(Duration.zero, _loadUserData);
+  }
+
+  Future<void> _loadUserData() async {
+    setState(() {
+      _isLoading = true;
+    });
+
+    try {
+      await _bloc.loadUserData();
+    } on InvalidRequestException catch (ex) {
+      Toaster.showError(context, ex.cause);
+
+      Future.delayed(Duration(seconds: 1), () {
+        Navigator.of(context).pushReplacementNamed(AppRoutes.login);
+      });
+    }
+
+    if (mounted) {
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,7 +77,7 @@ class _HomePageState extends State<HomePage> {
       ),
       floatingActionButton: LoadingActionButton(
         icon: Icons.add,
-        onPressed: _createTopic,
+        onPressed: _isLoading ? null : _createTopic,
         tooltip: "Criar pauta",
       ),
     );

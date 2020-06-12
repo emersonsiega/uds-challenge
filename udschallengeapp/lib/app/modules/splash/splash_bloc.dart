@@ -1,5 +1,6 @@
 import 'package:bloc_pattern/bloc_pattern.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:udschallengeapp/app/app_bloc.dart';
+import 'package:udschallengeapp/app/app_module.dart';
 import 'package:udschallengeapp/app/shared/config/app_routes.dart';
 
 class SplashBloc extends BlocBase {
@@ -7,9 +8,11 @@ class SplashBloc extends BlocBase {
   /// Check if there's a user logged and returns the future route to be accessed.
   ///
   Future<String> verifyLoggedUser() async {
+    final appBloc = AppModule.to.bloc<AppBloc>();
+
     // Always show the splash screen for at least 2 seconds
     final responses = await Future.wait([
-      _loadUser(),
+      appBloc.loadUser(),
       Future.delayed(Duration(seconds: 2)),
     ]);
 
@@ -17,16 +20,6 @@ class SplashBloc extends BlocBase {
       return AppRoutes.login;
     } else {
       return AppRoutes.home;
-    }
-  }
-
-  Future<FirebaseUser> _loadUser() async {
-    try {
-      final auth = FirebaseAuth.instance;
-      return await auth.currentUser();
-    } catch (ex) {
-      print(ex);
-      return null;
     }
   }
 

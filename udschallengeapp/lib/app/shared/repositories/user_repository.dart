@@ -15,11 +15,11 @@ class UserRepository extends Disposable {
     return user;
   }
 
-  Future<UserModel> find(String email) async {
+  Future<UserModel> find(String email, {String field: "email"}) async {
     Query query = _database
         .reference()
         .child(UserModel.collection)
-        .orderByChild("email")
+        .orderByChild(field)
         .equalTo(email);
 
     final snapshot = await query.once();
