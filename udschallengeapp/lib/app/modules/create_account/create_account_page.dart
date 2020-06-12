@@ -57,7 +57,6 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                   FocusScope.of(context).requestFocus(_emailNode);
                 },
                 enabled: !_isLoading,
-                keyboardType: TextInputType.emailAddress,
                 textInputAction: TextInputAction.next,
                 validator: StringValidator("Nome", 3).validate,
               ),

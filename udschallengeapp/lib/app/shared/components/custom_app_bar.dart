@@ -16,6 +16,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       title: Text(
         title,
         style: Theme.of(context).textTheme.headline.copyWith(
+              fontSize: 28,
               color: ColorPallete.black,
               fontWeight: FontWeight.w500,
             ),
@@ -25,5 +26,5 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   }
 
   @override
-  Size get preferredSize => AppBar().preferredSize;
+  Size get preferredSize => Size.fromHeight(65);
 }

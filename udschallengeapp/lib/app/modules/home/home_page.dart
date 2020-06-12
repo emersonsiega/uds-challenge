@@ -22,7 +22,7 @@ class _HomePageState extends State<HomePage> {
             padding: const EdgeInsets.only(right: 10.0),
             child: IconButton(
               icon: Icon(Icons.account_circle),
-              iconSize: 36,
+              iconSize: 40,
               onPressed: _onAccountPressed,
               tooltip: "Perfil do usuário",
             ),
