@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:udschallengeapp/app/shared/config/color_pallete.dart';
 
 class CreateTopicPage extends StatefulWidget {
-  final String title;
-  const CreateTopicPage({Key key, this.title = "CreateTopic"})
-      : super(key: key);
-
   @override
   _CreateTopicPageState createState() => _CreateTopicPageState();
 }
@@ -14,7 +11,13 @@ class _CreateTopicPageState extends State<CreateTopicPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title),
+        title: Text(
+          "Criar pauta",
+          style: Theme.of(context).textTheme.headline.copyWith(
+                color: ColorPallete.black,
+                fontWeight: FontWeight.w500,
+              ),
+        ),
       ),
       body: Column(
         children: <Widget>[],

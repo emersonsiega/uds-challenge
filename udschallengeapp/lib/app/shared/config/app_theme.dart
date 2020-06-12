@@ -32,6 +32,15 @@ class AppTheme {
           ),
         ),
       ),
+      bottomSheetTheme: BottomSheetThemeData(
+        elevation: 8.0,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(20),
+            topRight: Radius.circular(20),
+          ),
+        ),
+      ),
       textTheme: TextTheme(
         button: TextStyle(
           fontSize: 14,
