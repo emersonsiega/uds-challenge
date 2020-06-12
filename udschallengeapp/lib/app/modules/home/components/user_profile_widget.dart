@@ -35,7 +35,10 @@ class UserProfileWidget extends StatelessWidget {
                       horizontal: 16.0,
                     ),
                     child: OutlineButton(
-                      onPressed: onLogOut,
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                        onLogOut();
+                      },
                       child: Text(
                         "SAIR",
                         style: Theme.of(context).textTheme.button.copyWith(
