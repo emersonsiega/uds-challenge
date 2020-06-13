@@ -71,6 +71,7 @@ class _TopicsPageState extends State<TopicsPage> {
                     bottom: isLast && isExpanded ? 50.0 : 0.0,
                   ),
                   child: ExpandableTopicTile(
+                    key: Key(topic.key),
                     topic: topic,
                     isExpanded: isExpanded,
                     onTap: (bool expanded) {
@@ -112,6 +113,10 @@ class _TopicsPageState extends State<TopicsPage> {
   }
 
   void _onTopicSelected(TopicModel topic, bool expanded, int index) {
+    if (_isLoading) {
+      return;
+    }
+
     setState(() {
       _selectedTopic = null;
     });
@@ -121,7 +126,7 @@ class _TopicsPageState extends State<TopicsPage> {
         _selectedTopic = topic;
       });
 
-      Future.delayed(Duration(milliseconds: 100), () {
+      Future.delayed(Duration(milliseconds: 150), () {
         _controller.scrollToIndex(
           index,
           preferPosition: AutoScrollPosition.begin,

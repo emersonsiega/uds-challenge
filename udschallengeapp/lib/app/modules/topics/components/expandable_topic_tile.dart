@@ -7,24 +7,67 @@ import 'package:udschallengeapp/app/shared/config/color_palette.dart';
 import 'package:udschallengeapp/app/shared/model/topic_model.dart';
 
 class ExpandableTopicTile extends StatefulWidget {
+  final Key key;
   final TopicModel topic;
   final bool isExpanded;
   final ValueChanged<bool> onTap;
 
   ExpandableTopicTile({
+    this.key,
     @required this.topic,
     @required this.onTap,
     this.isExpanded: false,
-  });
+  }) : super(key: key);
 
   @override
   _ExpandableTopicTileState createState() => _ExpandableTopicTileState();
 }
 
-class _ExpandableTopicTileState extends State<ExpandableTopicTile> {
+class _ExpandableTopicTileState extends State<ExpandableTopicTile>
+    with SingleTickerProviderStateMixin {
+  AnimationController _animationController;
+  Animation<double> _contenSizeAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _animationController = AnimationController(
+      vsync: this,
+      duration: Duration(milliseconds: 120),
+    );
+
+    _contenSizeAnimation = Tween<double>(
+      begin: 0.0,
+      end: 1.0,
+    ).animate(CurvedAnimation(
+      parent: _animationController,
+      curve: Interval(
+        0.0,
+        1.0,
+        curve: Curves.linear,
+      ),
+    ));
+  }
+
+  @override
+  void didUpdateWidget(ExpandableTopicTile oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    ///
+    /// Decides if need to expand or collapse the topic tile
+    ///
+    if (oldWidget?.isExpanded == true && !widget.isExpanded) {
+      _animationController.reverse();
+    } else if (oldWidget?.isExpanded == false && widget.isExpanded) {
+      _animationController.forward();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
+      key: widget.key,
       onTap: _onTap,
       child: Card(
         elevation: 3.0,
@@ -69,28 +112,41 @@ class _ExpandableTopicTileState extends State<ExpandableTopicTile> {
                 TopicRowContent(
                   text: widget.topic.description,
                 ),
-                if (widget.isExpanded) ...[
-                  Padding(
-                    padding: const EdgeInsets.only(top: 4.0),
-                    child: TopicRowTitle(
-                      title: "Detalhes",
-                      icon: MdiIcons.textSubject,
-                    ),
-                  ),
-                  TopicRowContent(
-                    text: widget.topic.details,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 4.0),
-                    child: TopicRowTitle(
-                      title: "Criado por",
-                      icon: Icons.person,
-                    ),
-                  ),
-                  TopicRowContent(
-                    text: "${widget.topic.author} em $_createdAt",
-                  ),
-                ],
+                AnimatedBuilder(
+                  animation: _animationController,
+                  builder: (context, child) {
+                    return SizeTransition(
+                      sizeFactor: _contenSizeAnimation,
+                      axis: Axis.vertical,
+                      axisAlignment: -1.0,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: <Widget>[
+                          Padding(
+                            padding: const EdgeInsets.only(top: 4.0),
+                            child: TopicRowTitle(
+                              title: "Detalhes",
+                              icon: MdiIcons.textSubject,
+                            ),
+                          ),
+                          TopicRowContent(
+                            text: widget.topic.details,
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(top: 4.0),
+                            child: TopicRowTitle(
+                              title: "Criado por",
+                              icon: Icons.person,
+                            ),
+                          ),
+                          TopicRowContent(
+                            text: "${widget.topic.author} em $_createdAt",
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                ),
               ],
             ),
           ),
