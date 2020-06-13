@@ -18,7 +18,7 @@ class Toaster {
     Toast.show(
       message,
       context,
-      backgroundColor: ColorPalette.udsBlue,
+      backgroundColor: ColorPalette.lightBlue,
       textColor: ColorPalette.white,
       duration: Toast.LENGTH_LONG,
       gravity: Toast.BOTTOM,

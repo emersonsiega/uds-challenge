@@ -1,14 +1,19 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:udschallengeapp/app/app_module.dart';
 import 'package:udschallengeapp/app/modules/home/components/user_profile_widget.dart';
 import 'package:udschallengeapp/app/modules/home/home_bloc.dart';
 import 'package:udschallengeapp/app/modules/home/home_module.dart';
+import 'package:udschallengeapp/app/shared/blocs/user_topics_bloc.dart';
 import 'package:udschallengeapp/app/shared/components/custom_app_bar.dart';
 import 'package:udschallengeapp/app/shared/components/loading_action_button.dart';
 import 'package:udschallengeapp/app/shared/components/toaster.dart';
+import 'package:udschallengeapp/app/shared/components/topics_list_card.dart';
 import 'package:udschallengeapp/app/shared/config/app_routes.dart';
 import 'package:udschallengeapp/app/shared/config/color_palette.dart';
 import 'package:udschallengeapp/app/shared/exceptions/invalid_request_exception.dart';
+import 'package:udschallengeapp/app/shared/model/topic_model.dart';
+import 'package:udschallengeapp/app/shared/model/topics_page/topics_page_arguments.dart';
+import 'package:udschallengeapp/app/shared/model/topics_page/topics_page_type.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -16,7 +21,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final _bloc = HomeModule.to.bloc<HomeBloc>();
+  final _homeBloc = HomeModule.to.bloc<HomeBloc>();
+  final _userTopicsBloc = AppModule.to.bloc<UserTopicsBloc>();
 
   bool _isLoading = false;
 
@@ -24,27 +30,33 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
 
-    Future.delayed(Duration.zero, _loadUserData);
+    Future.delayed(Duration.zero, _loadData);
   }
 
-  Future<void> _loadUserData() async {
+  Future<void> _loadData() async {
     setState(() {
       _isLoading = true;
     });
 
+    await _loadUserData();
+
+    _userTopicsBloc.loadTopics();
+
+    if (mounted) {
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
+
+  Future<void> _loadUserData() async {
     try {
-      await _bloc.loadUserData();
+      await _homeBloc.loadUserData();
     } on InvalidRequestException catch (ex) {
       Toaster.showError(context, ex.cause);
 
       Future.delayed(Duration(seconds: 1), () {
         Navigator.of(context).pushReplacementNamed(AppRoutes.login);
-      });
-    }
-
-    if (mounted) {
-      setState(() {
-        _isLoading = false;
       });
     }
   }
@@ -66,13 +78,51 @@ class _HomePageState extends State<HomePage> {
           ),
         ],
       ),
-      body: Center(
-        child: Text(
-          "Você não possui nenhuma pauta criada.",
-          textAlign: TextAlign.center,
-          style: Theme.of(context).textTheme.subhead.copyWith(
-                color: ColorPallete.black,
-              ),
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 10),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: <Widget>[
+            StreamBuilder<List<TopicModel>>(
+              stream: _userTopicsBloc.openedTopicsStream,
+              initialData: [],
+              builder: (context, snapshot) {
+                return Flexible(
+                  flex: 5,
+                  child: TopicsListCard(
+                    title: "ABERTAS",
+                    size: snapshot.data.length,
+                    gradientColors: [
+                      ColorPalette.udsBlue,
+                      ColorPalette.lightBlue,
+                    ],
+                    onTap: _showOpenedTopics,
+                  ),
+                );
+              },
+            ),
+            StreamBuilder<List<TopicModel>>(
+              stream: _userTopicsBloc.closedTopicsStream,
+              initialData: [],
+              builder: (context, snapshot) {
+                return Flexible(
+                  flex: 5,
+                  child: TopicsListCard(
+                    title: "FINALIZADAS",
+                    size: snapshot.data.length,
+                    gradientColors: [
+                      ColorPalette.black2,
+                      ColorPalette.grey,
+                    ],
+                    onTap: _showClosedTopics,
+                  ),
+                );
+              },
+            ),
+            Spacer(
+              flex: 2,
+            )
+          ],
         ),
       ),
       floatingActionButton: LoadingActionButton(
@@ -97,13 +147,31 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  void _showOpenedTopics() {
+    Navigator.of(context).pushNamed(
+      AppRoutes.topics,
+      arguments: TopicsPageArguments(
+        title: "Pautas abertas",
+      ),
+    );
+  }
+
+  void _showClosedTopics() {
+    Navigator.of(context).pushNamed(
+      AppRoutes.topics,
+      arguments: TopicsPageArguments(
+        title: "Pautas finalizadas",
+        type: TopicsPageType.closed,
+      ),
+    );
+  }
+
   Future<void> _createTopic() async {
     Navigator.of(context).pushNamed(AppRoutes.createTopic);
   }
 
   Future<void> _logout() async {
-    //TODO: Temporary...
-    await FirebaseAuth.instance.signOut();
     Navigator.of(context).pushReplacementNamed(AppRoutes.login);
+    await _homeBloc.logout();
   }
 }

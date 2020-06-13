@@ -1,0 +1,4 @@
+enum TopicsPageType {
+  opened,
+  closed,
+}

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:udschallengeapp/app/app_bloc.dart';
 import 'package:udschallengeapp/app/app_module.dart';
 import 'package:udschallengeapp/app/modules/create_topic/create_topic_bloc.dart';
 import 'package:udschallengeapp/app/modules/create_topic/create_topic_module.dart';
+import 'package:udschallengeapp/app/shared/blocs/user_session_bloc.dart';
 import 'package:udschallengeapp/app/shared/components/custom_app_bar.dart';
 import 'package:udschallengeapp/app/shared/components/loading_action_button.dart';
 import 'package:udschallengeapp/app/shared/components/toaster.dart';
@@ -42,8 +42,8 @@ class _CreateTopicPageState extends State<CreateTopicPage> {
   void initState() {
     super.initState();
 
-    final _appBloc = AppModule.to.bloc<AppBloc>();
-    final user = _appBloc.userStream.value;
+    final _userSessionBloc = AppModule.to.bloc<UserSessionBloc>();
+    final user = _userSessionBloc.userStream.value;
     if (user != null) {
       _authorController.text = user.name;
     }

@@ -1,6 +1,6 @@
 import 'package:bloc_pattern/bloc_pattern.dart';
-import 'package:udschallengeapp/app/app_bloc.dart';
 import 'package:udschallengeapp/app/app_module.dart';
+import 'package:udschallengeapp/app/shared/blocs/user_session_bloc.dart';
 import 'package:udschallengeapp/app/shared/exceptions/invalid_request_exception.dart';
 import 'package:udschallengeapp/app/shared/model/topic_model.dart';
 import 'package:udschallengeapp/app/shared/repositories/topic_repository.dart';
@@ -9,9 +9,9 @@ class CreateTopicBloc extends BlocBase {
   Future<TopicModel> save(TopicModel topic) async {
     try {
       final _repo = AppModule.to.getDependency<TopicRepository>();
-      final _appBloc = AppModule.to.getBloc<AppBloc>();
+      final _sessionBloc = AppModule.to.getBloc<UserSessionBloc>();
 
-      final user = _appBloc.userStream.value;
+      final user = _sessionBloc.userStream.value;
 
       topic.userKey = user.key;
       topic.createdAt = DateTime.now();
