@@ -96,7 +96,10 @@ class _HomePageState extends State<HomePage> {
                       ColorPalette.udsBlue,
                       ColorPalette.lightBlue,
                     ],
-                    onTap: _showOpenedTopics,
+                    onTap: () => _showTopics(
+                      "Pautas abertas",
+                      TopicsPageType.opened,
+                    ),
                   ),
                 );
               },
@@ -114,7 +117,10 @@ class _HomePageState extends State<HomePage> {
                       ColorPalette.black2,
                       ColorPalette.grey,
                     ],
-                    onTap: _showClosedTopics,
+                    onTap: () => _showTopics(
+                      "Pautas finalizadas",
+                      TopicsPageType.closed,
+                    ),
                   ),
                 );
               },
@@ -147,23 +153,19 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  void _showOpenedTopics() {
-    Navigator.of(context).pushNamed(
-      AppRoutes.topics,
-      arguments: TopicsPageArguments(
-        title: "Pautas abertas",
-      ),
-    );
+  void _showTopics(String title, TopicsPageType type) {
+    Navigator.of(context)
+        .pushNamed(
+          AppRoutes.topics,
+          arguments: TopicsPageArguments(title: title, type: type),
+        )
+        .then(_showTopicsMessage);
   }
 
-  void _showClosedTopics() {
-    Navigator.of(context).pushNamed(
-      AppRoutes.topics,
-      arguments: TopicsPageArguments(
-        title: "Pautas finalizadas",
-        type: TopicsPageType.closed,
-      ),
-    );
+  void _showTopicsMessage(dynamic message) {
+    if (message != null) {
+      Toaster.showInfo(context, message);
+    }
   }
 
   Future<void> _createTopic() async {

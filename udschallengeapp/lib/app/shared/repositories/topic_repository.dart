@@ -18,6 +18,13 @@ class TopicRepository extends Disposable {
     return topic;
   }
 
+  Future<void> update(TopicModel topic) async {
+    final reference =
+        _database.reference().child(TopicModel.collection).child(topic.key);
+
+    await reference.set(topic.toJson());
+  }
+
   void findByUser(
     String userKey,
     void Function(Event) onChildAdded,
