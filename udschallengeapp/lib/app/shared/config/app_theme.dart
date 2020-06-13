@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:udschallengeapp/app/shared/config/color_pallete.dart';
+import 'package:udschallengeapp/app/shared/config/color_palette.dart';
 
 class AppTheme {
   static ThemeData get buildTheme {
@@ -8,15 +8,15 @@ class AppTheme {
         color: Colors.transparent,
         elevation: 0,
         iconTheme: IconThemeData(
-          color: ColorPallete.black,
+          color: ColorPalette.black,
         ),
         actionsIconTheme: IconThemeData(
-          color: ColorPallete.black,
+          color: ColorPalette.black,
         ),
       ),
-      primaryColor: ColorPallete.udsBlue,
-      accentColor: ColorPallete.udsBlue,
-      buttonColor: ColorPallete.udsBlue,
+      primaryColor: ColorPalette.udsBlue,
+      accentColor: ColorPalette.udsBlue,
+      buttonColor: ColorPalette.udsBlue,
       inputDecorationTheme: InputDecorationTheme(
         isDense: true,
         border: OutlineInputBorder(
@@ -45,7 +45,7 @@ class AppTheme {
         button: TextStyle(
           fontSize: 14,
           fontWeight: FontWeight.w500,
-          color: ColorPallete.white,
+          color: ColorPalette.white,
         ),
       ),
     );

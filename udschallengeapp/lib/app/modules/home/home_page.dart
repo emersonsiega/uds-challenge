@@ -7,7 +7,7 @@ import 'package:udschallengeapp/app/shared/components/custom_app_bar.dart';
 import 'package:udschallengeapp/app/shared/components/loading_action_button.dart';
 import 'package:udschallengeapp/app/shared/components/toaster.dart';
 import 'package:udschallengeapp/app/shared/config/app_routes.dart';
-import 'package:udschallengeapp/app/shared/config/color_pallete.dart';
+import 'package:udschallengeapp/app/shared/config/color_palette.dart';
 import 'package:udschallengeapp/app/shared/exceptions/invalid_request_exception.dart';
 
 class HomePage extends StatefulWidget {

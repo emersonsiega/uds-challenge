@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:udschallengeapp/app/shared/config/color_pallete.dart';
+import 'package:udschallengeapp/app/shared/config/color_palette.dart';
 
 class UserProfileWidget extends StatelessWidget {
   final Function onLogOut;
@@ -23,7 +23,7 @@ class UserProfileWidget extends StatelessWidget {
                 width: 30,
                 margin: EdgeInsets.only(top: 15, bottom: 30),
                 decoration: BoxDecoration(
-                  color: ColorPallete.black.withAlpha(80),
+                  color: ColorPalette.black.withAlpha(80),
                   borderRadius: BorderRadius.circular(5),
                 ),
               ),
@@ -42,7 +42,7 @@ class UserProfileWidget extends StatelessWidget {
                       child: Text(
                         "SAIR",
                         style: Theme.of(context).textTheme.button.copyWith(
-                              color: ColorPallete.udsBlue,
+                              color: ColorPalette.udsBlue,
                             ),
                       ),
                     ),

@@ -4,7 +4,7 @@ import 'package:udschallengeapp/app/modules/recover_password/recover_password_mo
 import 'package:udschallengeapp/app/shared/components/custom_app_bar.dart';
 import 'package:udschallengeapp/app/shared/components/loading_action_button.dart';
 import 'package:udschallengeapp/app/shared/components/toaster.dart';
-import 'package:udschallengeapp/app/shared/config/color_pallete.dart';
+import 'package:udschallengeapp/app/shared/config/color_palette.dart';
 import 'package:udschallengeapp/app/shared/exceptions/invalid_request_exception.dart';
 import 'package:udschallengeapp/app/shared/validator/email_validator.dart';
 
@@ -39,7 +39,7 @@ class _RecoverPasswordPageState extends State<RecoverPasswordPage> {
                 child: Text(
                   "Informe seu email de cadastro para recuperar sua senha.",
                   style: Theme.of(context).textTheme.subhead.copyWith(
-                        color: ColorPallete.black,
+                        color: ColorPalette.black,
                       ),
                   textAlign: TextAlign.center,
                 ),

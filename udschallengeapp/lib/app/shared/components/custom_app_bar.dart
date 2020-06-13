@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:udschallengeapp/app/shared/config/color_pallete.dart';
+import 'package:udschallengeapp/app/shared/config/color_palette.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
@@ -17,7 +17,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         title,
         style: Theme.of(context).textTheme.headline.copyWith(
               fontSize: 28,
-              color: ColorPallete.black,
+              color: ColorPalette.black,
               fontWeight: FontWeight.w500,
             ),
       ),

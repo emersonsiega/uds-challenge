@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:udschallengeapp/app/shared/config/color_pallete.dart';
+import 'package:udschallengeapp/app/shared/config/color_palette.dart';
 
 ///
 /// FloatingActionButton wrapper, with an internal CircularProgressIndicator
@@ -29,7 +29,7 @@ class LoadingActionButton extends StatelessWidget {
             ? CircularProgressIndicator(
                 key: Key("loading"),
                 strokeWidth: 1.5,
-                valueColor: AlwaysStoppedAnimation(ColorPallete.white),
+                valueColor: AlwaysStoppedAnimation(ColorPalette.white),
               )
             : Icon(
                 icon,

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:udschallengeapp/app/modules/splash/splash_bloc.dart';
 import 'package:udschallengeapp/app/modules/splash/splash_module.dart';
-import 'package:udschallengeapp/app/shared/config/color_pallete.dart';
+import 'package:udschallengeapp/app/shared/config/color_palette.dart';
 
 class SplashPage extends StatefulWidget {
   @override
@@ -27,7 +27,7 @@ class _SplashPageState extends State<SplashPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: ColorPallete.udsBlue,
+      backgroundColor: ColorPalette.udsBlue,
       body: SafeArea(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -52,7 +52,7 @@ class _SplashPageState extends State<SplashPage> {
                     child: CircularProgressIndicator(
                       strokeWidth: 1.5,
                       valueColor: AlwaysStoppedAnimation(
-                        ColorPallete.white,
+                        ColorPalette.white,
                       ),
                     ),
                   ),
@@ -65,7 +65,7 @@ class _SplashPageState extends State<SplashPage> {
                       "Aguarde, carregando dados de acesso...",
                       textAlign: TextAlign.center,
                       style: Theme.of(context).textTheme.subhead.copyWith(
-                            color: ColorPallete.white,
+                            color: ColorPalette.white,
                           ),
                     ),
                   ),

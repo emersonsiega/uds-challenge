@@ -3,7 +3,7 @@ import 'package:udschallengeapp/app/modules/login/login_bloc.dart';
 import 'package:udschallengeapp/app/modules/login/login_module.dart';
 import 'package:udschallengeapp/app/shared/components/toaster.dart';
 import 'package:udschallengeapp/app/shared/config/app_routes.dart';
-import 'package:udschallengeapp/app/shared/config/color_pallete.dart';
+import 'package:udschallengeapp/app/shared/config/color_palette.dart';
 import 'package:udschallengeapp/app/shared/exceptions/invalid_request_exception.dart';
 import 'package:udschallengeapp/app/shared/validator/email_validator.dart';
 import 'package:udschallengeapp/app/shared/validator/string_validator.dart';
@@ -89,7 +89,7 @@ class _LoginPageState extends State<LoginPage> {
                       child: Text(
                         "Recuperar senha",
                         style: Theme.of(context).textTheme.button.copyWith(
-                              color: ColorPallete.lightBlue,
+                              color: ColorPalette.lightBlue,
                             ),
                       ),
                       onPressed: _isLoading ? null : _recoverPassword,
@@ -113,7 +113,7 @@ class _LoginPageState extends State<LoginPage> {
                                 child: CircularProgressIndicator(
                                   strokeWidth: 1.5,
                                   valueColor: AlwaysStoppedAnimation(
-                                    ColorPallete.white,
+                                    ColorPalette.white,
                                   ),
                                 ),
                               )
@@ -135,7 +135,7 @@ class _LoginPageState extends State<LoginPage> {
                         child: Text(
                           "CRIAR CONTA",
                           style: Theme.of(context).textTheme.button.copyWith(
-                                color: ColorPallete.udsBlue,
+                                color: ColorPalette.udsBlue,
                               ),
                         ),
                       ),
