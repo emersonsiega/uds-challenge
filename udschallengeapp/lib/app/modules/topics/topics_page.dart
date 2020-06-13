@@ -56,13 +56,20 @@ class _TopicsPageState extends State<TopicsPage> {
             itemCount: snapshot.data.length,
             itemBuilder: (context, index) {
               TopicModel topic = snapshot.data[index];
+              bool isLast = index == snapshot.data.length - 1;
+              bool isExpanded = _selectedTopic?.key == topic?.key;
 
-              return ExpandableTopicTile(
-                topic: topic,
-                isExpanded: _selectedTopic?.key == topic?.key,
-                onTap: (bool expanded) {
-                  _onTopicSelected(topic, expanded);
-                },
+              return Padding(
+                padding: EdgeInsets.only(
+                  bottom: isLast && isExpanded ? 50.0 : 0.0,
+                ),
+                child: ExpandableTopicTile(
+                  topic: topic,
+                  isExpanded: isExpanded,
+                  onTap: (bool expanded) {
+                    _onTopicSelected(topic, expanded);
+                  },
+                ),
               );
             },
           ),
