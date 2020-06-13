@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:udschallengeapp/app/shared/config/color_pallete.dart';
 
+///
+/// FloatingActionButton wrapper, with an internal CircularProgressIndicator
+/// displayed when [isLoading] is true.
+///
 class LoadingActionButton extends StatelessWidget {
   final void Function() onPressed;
   final bool isLoading;
@@ -17,7 +21,7 @@ class LoadingActionButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FloatingActionButton(
-      onPressed: onPressed,
+      onPressed: _onPressed,
       tooltip: tooltip,
       child: AnimatedSwitcher(
         duration: Duration(milliseconds: 250),
@@ -33,5 +37,16 @@ class LoadingActionButton extends StatelessWidget {
               ),
       ),
     );
+  }
+
+  ///
+  /// Call onPressed only when it's not loading
+  ///
+  void _onPressed() {
+    if (isLoading) {
+      return;
+    }
+
+    onPressed();
   }
 }

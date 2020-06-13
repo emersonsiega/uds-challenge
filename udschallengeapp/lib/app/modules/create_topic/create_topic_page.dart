@@ -2,8 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:udschallengeapp/app/app_bloc.dart';
 import 'package:udschallengeapp/app/app_module.dart';
+import 'package:udschallengeapp/app/modules/create_topic/create_topic_bloc.dart';
+import 'package:udschallengeapp/app/modules/create_topic/create_topic_module.dart';
 import 'package:udschallengeapp/app/shared/components/custom_app_bar.dart';
 import 'package:udschallengeapp/app/shared/components/loading_action_button.dart';
+import 'package:udschallengeapp/app/shared/components/toaster.dart';
+import 'package:udschallengeapp/app/shared/exceptions/invalid_request_exception.dart';
+import 'package:udschallengeapp/app/shared/model/topic_model.dart';
 import 'package:udschallengeapp/app/shared/validator/string_validator.dart';
 
 class CreateTopicPage extends StatefulWidget {
@@ -13,6 +18,7 @@ class CreateTopicPage extends StatefulWidget {
 
 class _CreateTopicPageState extends State<CreateTopicPage> {
   final _formKey = GlobalKey<FormState>();
+  final _bloc = CreateTopicModule.to.bloc<CreateTopicBloc>();
 
   // Title
   final _titleController = TextEditingController();
@@ -74,7 +80,7 @@ class _CreateTopicPageState extends State<CreateTopicPage> {
                     },
                     enabled: !_isLoading,
                     textInputAction: TextInputAction.next,
-                    validator: StringValidator("Título", 3).validate,
+                    validator: StringValidator("Título").validate,
                   ),
                 ),
                 Padding(
@@ -96,7 +102,7 @@ class _CreateTopicPageState extends State<CreateTopicPage> {
                     },
                     enabled: !_isLoading,
                     textInputAction: TextInputAction.next,
-                    validator: StringValidator("Breve descrição", 10).validate,
+                    validator: StringValidator("Breve descrição").validate,
                   ),
                 ),
                 Padding(
@@ -118,7 +124,7 @@ class _CreateTopicPageState extends State<CreateTopicPage> {
                     onFieldSubmitted: (_) async {
                       FocusScope.of(context).requestFocus(_authorNode);
                     },
-                    validator: StringValidator("Detalhes", 10).validate,
+                    validator: StringValidator("Detalhes").validate,
                   ),
                 ),
                 Padding(
@@ -137,7 +143,7 @@ class _CreateTopicPageState extends State<CreateTopicPage> {
                     onFieldSubmitted: (_) async {
                       await _save();
                     },
-                    validator: StringValidator("Autor", 3).validate,
+                    validator: StringValidator("Autor").validate,
                   ),
                 ),
               ],
@@ -158,8 +164,29 @@ class _CreateTopicPageState extends State<CreateTopicPage> {
     FocusScope.of(context).requestFocus(FocusNode());
 
     if (_formKey.currentState.validate()) {
-      // TODO - Save topic
-      Navigator.of(context).pop();
+      setState(() {
+        _isLoading = true;
+      });
+
+      try {
+        final topic = TopicModel(
+          title: _titleController.text,
+          description: _descriptionController.text,
+          details: _detailsController.text,
+          author: _authorController.text,
+        );
+
+        await _bloc.save(topic);
+        Navigator.of(context).pop();
+      } on InvalidRequestException catch (ex) {
+        Toaster.showError(context, ex.cause);
+      }
+
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
     }
   }
 }
