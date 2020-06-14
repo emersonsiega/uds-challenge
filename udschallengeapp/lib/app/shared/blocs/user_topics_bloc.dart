@@ -40,9 +40,11 @@ class UserTopicsBloc extends BlocBase {
 
     if (topicAdded.closed) {
       _closed.add(topicAdded);
+      _sortList(_closed);
       _closedController.sink.add(_closed);
     } else {
       _opened.add(topicAdded);
+      _sortList(_opened);
       _openedController.sink.add(_opened);
     }
   }
@@ -78,6 +80,7 @@ class UserTopicsBloc extends BlocBase {
     final removeIndex = _getIndex(removeList, topicChanged);
     if (removeIndex >= 0) {
       removeList.removeAt(removeIndex);
+      _sortList(removeList);
       removeController.sink.add(removeList);
     }
 
@@ -88,6 +91,7 @@ class UserTopicsBloc extends BlocBase {
     } else {
       targetList[editIndex] = topicChanged;
     }
+    _sortList(targetList);
     targetController.sink.add(targetList);
   }
 
@@ -101,6 +105,13 @@ class UserTopicsBloc extends BlocBase {
     final key = event.snapshot.key;
     final topicMac = Map<String, dynamic>.from(event.snapshot.value);
     return TopicModel.fromJson(key, topicMac);
+  }
+
+  void _sortList(List<TopicModel> list) {
+    list.sort(
+      (TopicModel base, TopicModel other) =>
+          other.createdAt.compareTo(base.createdAt),
+    );
   }
 
   @override
