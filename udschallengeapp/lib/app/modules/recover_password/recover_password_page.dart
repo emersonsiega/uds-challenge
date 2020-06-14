@@ -48,7 +48,9 @@ class _RecoverPasswordPageState extends State<RecoverPasswordPage> {
                 controller: _emailController,
                 decoration: InputDecoration(
                   labelText: "Email",
-                  helperText: " ",
+                  helperText:
+                      "Certifique-se de olhar a caixa de Spam. O email enviado pode estar lá!",
+                  helperMaxLines: 3,
                   prefixIcon: Icon(Icons.alternate_email),
                 ),
                 onFieldSubmitted: (_) async {

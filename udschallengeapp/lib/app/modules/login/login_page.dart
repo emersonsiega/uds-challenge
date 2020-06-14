@@ -152,9 +152,13 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Future<void> _recoverPassword() async {
-    Navigator.of(context)
-        .pushNamed(AppRoutes.recoverPassword)
-        .then(_setupReceivedEmail);
+    Navigator.of(context).pushNamed(AppRoutes.recoverPassword).then((email) {
+      _setupReceivedEmail(email);
+
+      if (email != null) {
+        Toaster.showInfo(context, "Email de recuperação de senha enviado!");
+      }
+    });
   }
 
   Future<void> _createAccount() async {

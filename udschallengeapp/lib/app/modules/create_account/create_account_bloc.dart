@@ -16,6 +16,9 @@ class CreateAccountBloc extends BlocBase {
     if (authUser?.uid != null) {
       user.authId = authUser?.uid;
 
+      // After create the account, the user is automatically logged in
+      // Call sign out to force the user to manually log in
+      await _auth.signOut();
       return await _saveUser(user);
     }
   }
