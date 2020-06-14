@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:rxdart/subjects.dart';
 import 'package:udschallengeapp/app/app_module.dart';
+import 'package:udschallengeapp/app/shared/blocs/user_topics_bloc.dart';
 import 'package:udschallengeapp/app/shared/exceptions/invalid_request_exception.dart';
 import 'package:udschallengeapp/app/shared/model/user_model.dart';
 import 'package:udschallengeapp/app/shared/repositories/user_repository.dart';
@@ -35,8 +36,13 @@ class UserSessionBloc extends BlocBase {
     }
   }
 
-  void clearUser() {
+  Future<void> logout() async {
+    final _userTopicsBloc = AppModule.to.bloc<UserTopicsBloc>();
+
+    _userTopicsBloc.clearTopics();
     _userSessionController.add(UserModel());
+
+    await FirebaseAuth.instance.signOut();
   }
 
   @override

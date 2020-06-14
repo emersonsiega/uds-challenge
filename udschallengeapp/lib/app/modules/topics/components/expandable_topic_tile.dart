@@ -51,6 +51,12 @@ class _ExpandableTopicTileState extends State<ExpandableTopicTile>
   }
 
   @override
+  void dispose() {
+    super.dispose();
+    _animationController.dispose();
+  }
+
+  @override
   void didUpdateWidget(ExpandableTopicTile oldWidget) {
     super.didUpdateWidget(oldWidget);
 

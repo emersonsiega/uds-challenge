@@ -89,7 +89,7 @@ class _LoginPageState extends State<LoginPage> {
                       child: Text(
                         "Recuperar senha",
                         style: Theme.of(context).textTheme.button.copyWith(
-                              color: ColorPalette.lightBlue,
+                              color: ColorPalette.udsBlue,
                             ),
                       ),
                       onPressed: _isLoading ? null : _recoverPassword,

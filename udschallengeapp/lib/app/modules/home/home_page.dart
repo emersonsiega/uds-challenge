@@ -3,6 +3,7 @@ import 'package:udschallengeapp/app/app_module.dart';
 import 'package:udschallengeapp/app/modules/home/components/user_profile_widget.dart';
 import 'package:udschallengeapp/app/modules/home/home_bloc.dart';
 import 'package:udschallengeapp/app/modules/home/home_module.dart';
+import 'package:udschallengeapp/app/shared/blocs/user_session_bloc.dart';
 import 'package:udschallengeapp/app/shared/blocs/user_topics_bloc.dart';
 import 'package:udschallengeapp/app/shared/components/custom_app_bar.dart';
 import 'package:udschallengeapp/app/shared/components/loading_action_button.dart';
@@ -173,7 +174,8 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> _logout() async {
+    final _userSessionBloc = AppModule.to.bloc<UserSessionBloc>();
+    await _userSessionBloc.logout();
     Navigator.of(context).pushReplacementNamed(AppRoutes.login);
-    await _homeBloc.logout();
   }
 }

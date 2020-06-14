@@ -31,6 +31,8 @@ class AppTheme {
             Radius.circular(40.0),
           ),
         ),
+        highlightColor: ColorPalette.lightBlue.withAlpha(50),
+        splashColor: ColorPalette.lightBlue.withAlpha(100),
       ),
       bottomSheetTheme: BottomSheetThemeData(
         elevation: 8.0,

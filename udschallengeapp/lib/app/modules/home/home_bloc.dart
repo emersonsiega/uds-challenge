@@ -1,8 +1,6 @@
 import 'package:bloc_pattern/bloc_pattern.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:udschallengeapp/app/app_module.dart';
 import 'package:udschallengeapp/app/shared/blocs/user_session_bloc.dart';
-import 'package:udschallengeapp/app/shared/blocs/user_topics_bloc.dart';
 import 'package:udschallengeapp/app/shared/exceptions/invalid_request_exception.dart';
 import 'package:udschallengeapp/app/shared/model/user_model.dart';
 
@@ -24,16 +22,6 @@ class HomeBloc extends BlocBase {
     throw InvalidRequestException(
       "Não foi possível carregar os dados do usuário",
     );
-  }
-
-  Future<void> logout() async {
-    final _userSessionBloc = AppModule.to.bloc<UserSessionBloc>();
-    final _userTopicsBloc = AppModule.to.bloc<UserTopicsBloc>();
-
-    _userTopicsBloc.clearTopics();
-    _userSessionBloc.clearUser();
-
-    await FirebaseAuth.instance.signOut();
   }
 
   @override
