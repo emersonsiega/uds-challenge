@@ -85,9 +85,7 @@ class _ExpandableTopicTileState extends State<ExpandableTopicTile>
         ),
         child: Container(
           decoration: BoxDecoration(
-            color: ColorPalette.grey.withOpacity(
-              widget.isExpanded ? 0.15 : 0.0,
-            ),
+            color: ColorPalette.white,
             borderRadius: BorderRadius.all(
               Radius.circular(8),
             ),
